@@ -113,6 +113,10 @@ with st.sidebar:
     if selected_dates and len(selected_dates) == 2:
         start_date, end_date = selected_dates
     else:
+        st.info(
+        'Silakan pilih tanggal akhir untuk melengkapi rentang waktu. '
+        'Sementara itu, dashboard menampilkan seluruh data.'
+    )
         start_date, end_date = min_date, max_date
 
 
