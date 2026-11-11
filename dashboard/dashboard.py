@@ -1,3 +1,4 @@
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -12,7 +13,7 @@ st.set_page_config(
 
 sns.set_theme(style='whitegrid', palette='muted')
 
-# Membaca dataset day.csv
+# Membaca dataset
 BASE_DIR = Path(__file__).resolve().parent
 all_df = pd.read_csv(BASE_DIR / 'main_data.csv')
 
@@ -41,7 +42,7 @@ weather_mapping = {
 all_df['weather_name'] = all_df['weathersit'].map(weather_mapping)
 
 
-# function untuk menyiapkan data visualisasi
+# Function untuk menyiapkan data visualisasi
 def create_seasonal_summary_df(df):
     seasonal_df = df.groupby(
         ['season_name', 'yr'], as_index=False
@@ -93,7 +94,7 @@ def create_user_type_df(df):
     return user_df
 
 
-# Filter pada sidebar
+# Filter tanggal pada sidebar
 min_date = all_df['dteday'].min().date()
 max_date = all_df['dteday'].max().date()
 
@@ -101,12 +102,19 @@ with st.sidebar:
     st.title('Bike Sharing')
     st.write('Filter data penyewaan sepeda')
 
-    start_date, end_date = st.date_input(
+    selected_dates = st.date_input(
         label='Rentang Waktu',
         min_value=min_date,
         max_value=max_date,
         value=(min_date, max_date)
     )
+
+    # Memeriksa kelengkapan rentang tanggal
+    if selected_dates and len(selected_dates) == 2:
+        start_date, end_date = selected_dates
+    else:
+        start_date, end_date = min_date, max_date
+
 
 # Filter DataFrame berdasarkan tanggal
 main_df = all_df[
@@ -172,7 +180,9 @@ with tab1:
 
     # Komposisi jenis pengguna
     st.subheader('Komposisi Penyewaan Berdasarkan Jenis Pengguna')
-    st.caption('Perbandingan total penyewaan pengguna terdaftar dan kasual.')
+    st.caption(
+        'Perbandingan total penyewaan pengguna terdaftar dan kasual.'
+    )
 
     fig, ax = plt.subplots(figsize=(7, 5))
 
@@ -202,7 +212,7 @@ with tab1:
     ax.axis('equal')
 
     plt.tight_layout()
-    st.pyplot(fig, use_container_width=True)
+    st.pyplot(fig, width="stretch")
     plt.close(fig)
 
 
@@ -210,7 +220,10 @@ with tab2:
 
     # Pertumbuhan penyewaan berdasarkan musim
     st.subheader('Pertumbuhan Penyewaan Berdasarkan Musim')
-    st.caption('Perbandingan persentase pertumbuhan rata-rata penyewaan harian tahun 2011 dan 2012.')
+    st.caption(
+        'Perbandingan persentase pertumbuhan rata-rata penyewaan harian '
+        'tahun 2011 dan 2012.'
+    )
 
     if not growth_df.empty:
         fig, ax = plt.subplots(figsize=(10, 5))
@@ -248,17 +261,17 @@ with tab2:
         ax.grid(axis='y', visible=False)
 
         plt.tight_layout()
-        st.pyplot(fig, use_container_width=True)
+        st.pyplot(fig, width="stretch")
         plt.close(fig)
-
-    else:
-        st.info('Pilih rentang tanggal yang mencakup tahun 2011 dan 2012 untuk melihat pertumbuhan.')
 
     st.divider()
 
     # Rata-rata penyewaan berdasarkan cuaca
     st.subheader('Penyewaan Berdasarkan Kondisi Cuaca')
-    st.caption('Perbandingan rata-rata penyewaan sepeda harian pada setiap kondisi cuaca.')
+    st.caption(
+        'Perbandingan rata-rata penyewaan sepeda harian '
+        'pada setiap kondisi cuaca.'
+    )
 
     fig, ax = plt.subplots(figsize=(10, 5))
 
@@ -285,17 +298,6 @@ with tab2:
         ax=ax
     )
 
-    for bar in ax.patches:
-        ax.annotate(
-            f'{bar.get_height():,.0f}',
-            (bar.get_x() + bar.get_width() / 2, bar.get_height()),
-            ha='center',
-            va='bottom',
-            fontsize=10,
-            xytext=(0, 5),
-            textcoords='offset points'
-        )
-
     ax.set_xlabel('Kondisi Cuaca')
     ax.set_ylabel('Rata-rata Penyewaan Harian')
     ax.set_ylim(bottom=0)
@@ -305,14 +307,16 @@ with tab2:
     plt.xticks(rotation=15)
     plt.tight_layout()
 
-    st.pyplot(fig, use_container_width=True)
+    st.pyplot(fig, width="stretch")
     plt.close(fig)
 
     st.divider()
 
     # Perbandingan penyewaan berdasarkan musim dan tahun
     st.subheader('Perbandingan Penyewaan Berdasarkan Musim')
-    st.caption('Rata-rata penyewaan harian pada setiap musim tahun 2011 dan 2012.')
+    st.caption(
+        'Rata-rata penyewaan harian pada setiap musim tahun 2011 dan 2012.'
+    )
 
     fig, ax = plt.subplots(figsize=(10, 5))
 
@@ -343,7 +347,7 @@ with tab2:
     plt.xticks(rotation=10)
     plt.tight_layout()
 
-    st.pyplot(fig, use_container_width=True)
+    st.pyplot(fig, width="stretch")
     plt.close(fig)
 
 
