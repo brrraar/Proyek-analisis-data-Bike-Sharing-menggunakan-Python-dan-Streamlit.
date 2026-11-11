@@ -21,7 +21,7 @@ all_df = pd.read_csv(BASE_DIR / 'main_data.csv')
 all_df['dteday'] = pd.to_datetime(all_df['dteday'])
 all_df.sort_values(by='dteday', inplace=True)
 
-# Mengubah kode musim menjadi nama musim
+# Kode musim menjadi nama musim
 season_mapping = {
     1: 'Musim Semi',
     2: 'Musim Panas',
@@ -31,7 +31,7 @@ season_mapping = {
 
 all_df['season_name'] = all_df['season'].map(season_mapping)
 
-# Mengubah kode cuaca menjadi keterangan
+# Kode cuaca menjadi keterangan
 weather_mapping = {
     1: 'Cerah',
     2: 'Berkabut/Berawan',
@@ -42,7 +42,7 @@ weather_mapping = {
 all_df['weather_name'] = all_df['weathersit'].map(weather_mapping)
 
 
-# Function untuk menyiapkan data visualisasi
+# Menyiapkan visualisasi data
 def create_seasonal_summary_df(df):
     seasonal_df = df.groupby(
         ['season_name', 'yr'], as_index=False
@@ -134,7 +134,7 @@ weather_df = create_weather_summary_df(main_df)
 user_df = create_user_type_df(main_df)
 
 
-# Menampilkan header dashboard
+# Header dashboard
 st.title('Bike Sharing Dashboard')
 st.caption(
     'Analisis penyewaan sepeda di Washington D.C. '
@@ -144,7 +144,7 @@ st.caption(
 st.divider()
 
 
-# Membuat tab dashboard
+# Tab dashboard
 tab1, tab2 = st.tabs([
     'Ringkasan',
     'Analisis Penyewaan'
@@ -303,7 +303,6 @@ with tab2:
         color=weather_colors
     )
 
-    # Menampilkan nilai rata-rata pada setiap batang
     for bar in ax.patches:
         ax.annotate(
             f'{bar.get_height():,.0f}',
