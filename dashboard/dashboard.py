@@ -290,13 +290,30 @@ with tab2:
 
     weather_df = weather_df.sort_values('weather_name')
 
-    sns.barplot(
-        data=weather_df,
-        x='weather_name',
-        y='average_rentals',
-        color='#83B6A0',
-        ax=ax
+    max_rentals = weather_df['average_rentals'].max()
+
+    weather_colors = [
+        '#2E8B57' if value == max_rentals else '#A8CDB8'
+        for value in weather_df['average_rentals']
+    ]
+
+    ax.bar(
+        weather_df['weather_name'].astype(str),
+        weather_df['average_rentals'],
+        color=weather_colors
     )
+
+    # Menampilkan nilai rata-rata pada setiap batang
+    for bar in ax.patches:
+        ax.annotate(
+            f'{bar.get_height():,.0f}',
+            (bar.get_x() + bar.get_width() / 2, bar.get_height()),
+            ha='center',
+            va='bottom',
+            fontsize=10,
+            xytext=(0, 5),
+            textcoords='offset points'
+        )
 
     ax.set_xlabel('Kondisi Cuaca')
     ax.set_ylabel('Rata-rata Penyewaan Harian')
