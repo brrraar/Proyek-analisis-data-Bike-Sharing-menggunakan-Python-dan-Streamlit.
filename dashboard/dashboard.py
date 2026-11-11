@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+from pathlib import Path
 
 # Tampilan dashboard
 st.set_page_config(
@@ -12,7 +13,8 @@ st.set_page_config(
 sns.set_theme(style='whitegrid', palette='muted')
 
 # Membaca dataset day.csv
-all_df = pd.read_csv('main_data.csv')
+BASE_DIR = Path(__file__).resolve().parent
+all_df = pd.read_csv(BASE_DIR / 'main_data.csv')
 
 # Menyiapkan DataFrame
 all_df['dteday'] = pd.to_datetime(all_df['dteday'])
