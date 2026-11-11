@@ -1,4 +1,4 @@
-# Bike Sharing Dashboard 
+# Bike Sharing Dashboard
 
 ## Setup Environment - Anaconda
 
@@ -11,8 +11,7 @@ pip install -r requirements.txt
 ## Setup Environment - Shell/Terminal
 
 ```bash
-mkdir submission
-cd submission
+pip install pipenv
 pipenv --python 3.11
 pipenv shell
 pip install -r requirements.txt
